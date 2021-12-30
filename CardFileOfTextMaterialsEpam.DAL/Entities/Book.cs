@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Entities {
-	public class Card:IEntity {
+	public class Book:IEntity {
 		[Key]
-		[ForeignKey(nameof(BookId))]
+		[ForeignKey(nameof(CategoryId))]
 		
 		public int Id { get; set; }
-		public int BookId { get; set; }
 		
+		public string BookName { get; set; }
+		
+		public int CategoryId { get; set; }
 	}
 }
