@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Entities {
-	public class Card:IEntity {
-		[Key]
-		[ForeignKey(nameof(BookId))]
+	public class Card:Entity {
 		
-		public int Id { get; set; }
 		public int BookId { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        public ICollection<Book> Books { get; set; }
 		
 	}
 }

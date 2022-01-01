@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 namespace CardFileOfTextMaterialsEpam.DAL {
 	public class CardFileDbContext: DbContext {
 		public CardFileDbContext(DbContextOptions<CardFileDbContext> options) : base(options)
-		{
-		}
-		public DbSet<Book> Books { get; set; }
-		public DbSet<Card> Cards { get; set; }
-		public DbSet<User> Users { get; set; }
-		public DbSet<Category> Categories { get; set; }
+        {
+        }
+		public DbSet<Book> EntityBooks { get; set; }
+        public DbSet<Card> EntityCards { get; set; }
+		public DbSet<User> EntityUsers { get; set; }
+		public DbSet<Category> EntityCategories { get; set; }
 	}
 }

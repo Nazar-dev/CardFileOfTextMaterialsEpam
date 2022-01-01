@@ -5,16 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Entities {
-	public class User:IEntity {
-		[Key]
-		[ForeignKey(nameof(CardId))]
-		public int Id { get; set; }
-		
-		public string Name { get; set; }
-		
-		public string Surname { get; set; }
-		public int CardId { get; set; }
-		
-		public List<Card> Cards { get; set; }
+	public class User:Entity {
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public ICollection<Card> Cards { get; set; }
 	}
 }

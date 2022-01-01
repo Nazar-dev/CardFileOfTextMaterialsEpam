@@ -6,5 +6,16 @@
         <AssemblyName>CardFileOfTextMaterialsEpam.PL</AssemblyName>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.13">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CardFileOfTextMaterialsEpam.BL\CardFileOfTextMaterialsEpam.BL.csproj" />
+    </ItemGroup>
+
 
 </Project>

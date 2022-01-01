@@ -13,21 +13,21 @@ namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 		}
 
 		public IEnumerable<User> GetAll() {
-			return _context.Users;
+			return _context.EntityUsers;
 		}
 		public User Get(int id) {
-			return _context.Users.FirstOrDefault(x => x.Id  == id);
+			return _context.EntityUsers.FirstOrDefault(x => x.Id  == id);
 		}
 		public void Create(User item) {
-			if (_context.Users.Any(x => x.Id == item.Id))
+			if (_context.EntityUsers.Any(x => x.Id == item.Id))
 				throw new Exception(); // TODO display on webpage eror
-			_context.Users.Add(item);
+			_context.EntityUsers.Add(item);
 		}
 		public void Update(User item) {
-			_context.Users.Update(item);
+			_context.EntityUsers.Update(item);
 		}
 		public void Delete(int id) {
-			_context.Users.Remove(Get(id));
+			_context.EntityUsers.Remove(Get(id));
 		}
 	}
 }
