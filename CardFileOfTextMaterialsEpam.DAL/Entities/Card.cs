@@ -9,7 +9,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Entities {
 		
 		public int BookId { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public MyPerson MyPerson { get; set; }
         public ICollection<Book> Books { get; set; }
 		
 	}

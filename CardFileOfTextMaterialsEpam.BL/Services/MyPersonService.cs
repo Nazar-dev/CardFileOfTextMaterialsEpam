@@ -6,31 +6,31 @@ using CardFileOfTextMaterialsEpam.BL.Models;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
 
 namespace CardFileOfTextMaterialsEpam.BL.Services {
-	public class UserService:IUserService {
+	public class MyPersonService:IMyPersonService {
         private readonly IUnitOfWork _unitOfWork;
         private readonly Mapper _mapper;
 
-        public UserService(IUnitOfWork unitOfWork, Mapper mapper)
+        public MyPersonService(IUnitOfWork unitOfWork, Mapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public IEnumerable<UserModel> GetAll()
+        public IEnumerable<MyPersonModel> GetAll()
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<UserModel> GetByIdAsync(int id)
+        public Task<MyPersonModel> GetByIdAsync(int id)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task AddAsync(UserModel model)
+        public Task AddAsync(MyPersonModel model)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task UpdateAsync(UserModel model)
+        public Task UpdateAsync(MyPersonModel model)
         {
             throw new System.NotImplementedException();
         }

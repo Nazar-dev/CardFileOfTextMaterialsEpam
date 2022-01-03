@@ -80,7 +80,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.ToTable("EntityCategories");
                 });
 
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.User", b =>
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,13 +119,13 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Card", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.User", "User")
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", "MyPerson")
                         .WithMany("Cards")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("MyPerson");
                 });
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Card", b =>
@@ -138,7 +138,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Navigation("BookCollection");
                 });
 
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.User", b =>
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", b =>
                 {
                     b.Navigation("Cards");
                 });

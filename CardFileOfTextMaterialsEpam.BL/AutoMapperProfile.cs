@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using CardFileOfTextMaterialsEpam.BL.Auth;
 using CardFileOfTextMaterialsEpam.BL.Models;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
 
@@ -11,9 +12,20 @@ namespace CardFileOfTextMaterialsEpam.BL
         public AutoMapperProfile()
         {
             CreateMap<Book, BookModel>().ReverseMap();
-            CreateMap<Card, CardModel>().ReverseMap();
-            CreateMap<Category, CategoryModel>().ReverseMap();
-            CreateMap<User,UserModel>().ReverseMap();
+            CreateMap<Card, CardModel>()
+                .ForMember(c => c.BooksIds, 
+                p => p.MapFrom(book => book.Books.Select(x=>x.Id)))
+                .ReverseMap();
+            CreateMap<Category, CategoryModel>()
+                .ForMember(c => c.BookIds,
+                    b => b.MapFrom(book => book.BookCollection.Select(x=>x.Id)))
+                .ReverseMap();
+            CreateMap<MyPerson,MyPersonModel>()
+                .ForMember(u => u.CardIds,
+                    b => b.MapFrom(user => user.Cards.Select(x=>x.Id))).ReverseMap();
+            CreateMap<UserSignUpModel, User>()
+                .ForMember(u => u.UserName,
+                    opt => opt.MapFrom(ur => ur.Email));
         }
     }
 }

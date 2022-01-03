@@ -12,18 +12,18 @@ namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 			_context = context;
 		}
 
-		public IEnumerable<User> GetAll() {
+		public IEnumerable<MyPerson> GetAll() {
 			return _context.EntityUsers;
 		}
-		public User Get(int id) {
+		public MyPerson Get(int id) {
 			return _context.EntityUsers.FirstOrDefault(x => x.Id  == id);
 		}
-		public void Create(User item) {
+		public void Create(MyPerson item) {
 			if (_context.EntityUsers.Any(x => x.Id == item.Id))
 				throw new Exception(); // TODO display on webpage eror
 			_context.EntityUsers.Add(item);
 		}
-		public void Update(User item) {
+		public void Update(MyPerson item) {
 			_context.EntityUsers.Update(item);
 		}
 		public void Delete(int id) {
