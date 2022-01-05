@@ -40,7 +40,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         {
             if (!Check(model.BookName)) throw new CardFileExeption();
             var reader = _mapper.Map<BookModel, Book>(model);
-            _unitOfWork.BookRepository.Update(reader);
+            _unitOfWork.BookRepository.Create(reader);
             _unitOfWork.SaveAsync();
             return Task.CompletedTask;
         }

@@ -6,13 +6,13 @@ namespace CardFileOfTextMaterialsEpam.DAL {
 	public class UnitOfWork:IUnitOfWork {
 		private readonly CardFileDbContext _context;
 		
-		private BookRepository _bookRepository;
+		private IBookRepository _bookRepository;
 		
-		private CardRepository _cardRepository;
+		private ICardRepository _cardRepository;
 		
-		private CategoryRepository _categoryRepository;
+		private ICategoryRepository _categoryRepository;
 		
-		private UserRepository _userRepository;
+		private IUserRepository _userRepository;
 		
 		public UnitOfWork(CardFileDbContext context) {
 			_context = context;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CardFileOfTextMaterialsEpam.BL.Interfaces;
 using CardFileOfTextMaterialsEpam.BL.Models;
 using CardFileOfTextMaterialsEpam.BL.Services;
 using Microsoft.AspNetCore.Http;
@@ -13,8 +14,8 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly BookService _bookService;
-        public BookController(BookService bookService)
+        private readonly IBookService _bookService;
+        public BookController(IBookService bookService)
         {
             _bookService = bookService;
         }
@@ -33,7 +34,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<BookModel> GetUserById(int id)
+        public async Task<BookModel> GetBookById(int id)
         {
             try
             {
@@ -81,20 +82,20 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return BadRequest(e.Message);
             }
         }
-        //
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteBookById(int id)
-        // {
-        //     try
-        //     {
-        //         await _bookService.DeleteByIdAsync(id);
-        //         return new EmptyResult();
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e.Message);
-        //     }
-        // }
+        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBookById(int id)
+        {
+            try
+            {
+                await _bookService.DeleteByIdAsync(id);
+                return new EmptyResult();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
     }
 }

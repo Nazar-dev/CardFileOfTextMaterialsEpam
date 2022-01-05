@@ -10,21 +10,21 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CardController : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly ICardService _cardService;
-        public CardController(ICardService cardService)
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
-            _cardService = cardService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CardModel>> GetAllCards()
+        public async Task<IEnumerable<CategoryModel>> GetAllCategories()
         {
-
+            
             try
             {
-                return await _cardService.GetAllAsync();
+                return await _categoryService.GetAllAsync();
             }
             catch (Exception e)
             {
@@ -32,11 +32,11 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<CardModel> GetCardById(int id)
+        public async Task<CategoryModel> GetCategoryById(int id)
         {
             try
             {
-                return await _cardService.GetByIdAsync(id);
+                return await _categoryService.GetByIdAsync(id);
             }
             catch (Exception e)
             {
@@ -44,16 +44,16 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCard([FromBody] CardModel cardModel)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryModel categoryModel)
         {
-            if (cardModel == null)
+            if (categoryModel == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _cardService.AddAsync(cardModel);
+                await _categoryService.AddAsync(categoryModel);
                 return new EmptyResult();
             }
             catch (Exception e)
@@ -63,7 +63,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCard([FromBody] CardModel model)
+        public async Task<IActionResult> UpdateCategory([FromBody] CategoryModel model)
         {
             if (model == null)
             {
@@ -72,7 +72,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
 
             try
             {
-                await _cardService.UpdateAsync(model);
+                await _categoryService.UpdateAsync(model);
                 return new EmptyResult();
             }
             catch (Exception e)
@@ -82,11 +82,11 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCardById(int id)
+        public async Task<IActionResult> DeleteCategoryById(int id)
         {
             try
             {
-                await _cardService.DeleteByIdAsync(id);
+                await _categoryService.DeleteByIdAsync(id);
                 return new EmptyResult();
             }
             catch (Exception e)
@@ -94,7 +94,5 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-
     }
 }
