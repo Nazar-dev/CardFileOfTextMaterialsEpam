@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CardFileOfTextMaterialsEpam.BL.Interfaces;
 using CardFileOfTextMaterialsEpam.BL.Models;
+using CardFileOfTextMaterialsEpam.BL.Validation;
+using CardFileOfTextMaterialsEpam.DAL.Entities;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
 
 namespace CardFileOfTextMaterialsEpam.BL.Services
@@ -12,36 +15,57 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
     public class CategoryService:ICategoryService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public CategoryService(IUnitOfWork unitOfWork, Mapper mapper)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public IEnumerable<CategoryModel> GetAll()
+        public Task<IEnumerable<CategoryModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var book = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryModel>>(_unitOfWork.CategoryRepository.GetAll());
+            return Task.FromResult(book);
         }
 
         public Task<CategoryModel> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryModel>>(_unitOfWork.CategoryRepository.GetAll())
+                .FirstOrDefault(x => x.Id == id);
+            return Task.FromResult(category);
         }
 
         public Task AddAsync(CategoryModel model)
         {
-            throw new NotImplementedException();
+            if (!Check(model.Name)) throw new CardFileExeption();
+            var category = _mapper.Map<CategoryModel, Category>(model);
+            _unitOfWork.CategoryRepository.Update(category);
+            _unitOfWork.SaveAsync();
+            return Task.CompletedTask;
+        }
+
+        private bool Check(string name)
+        {
+            if (name == "")
+                return false;
+            return true;
         }
 
         public Task UpdateAsync(CategoryModel model)
         {
-            throw new NotImplementedException();
+            if (!Check(model.Name)) throw new CardFileExeption();
+            var category = _mapper.Map<CategoryModel, Category>(model);
+            _unitOfWork.CategoryRepository.Update(category);
+            _unitOfWork.SaveAsync();
+            return Task.CompletedTask;
         }
 
         public Task DeleteByIdAsync(int modelId)
         {
-            throw new NotImplementedException();
+            var model = GetByIdAsync(modelId).Result;
+            var category = _mapper.Map<CategoryModel, Category>(model);
+            _unitOfWork.CategoryRepository.Delete(category.Id);
+            return Task.CompletedTask;
         }
     }
 }

@@ -19,6 +19,51 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.13")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.BL.Auth.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConcurrencyStamp = "930bb2db-0330-4f6e-8e53-04ceaf88a206",
+                            Name = "testUser",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConcurrencyStamp = "26fcac7e-4891-4dd5-ac9b-365a4547f2e0",
+                            Name = "testAdmin",
+                            NormalizedName = "ADMIN"
+                        });
+                });
+
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.BL.Auth.User", b =>
                 {
                     b.Property<int>("Id")
@@ -92,51 +137,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.BL.Auth.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConcurrencyStamp = "827885b7-865a-4946-b602-6766e397801c",
-                            Name = "testUser",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConcurrencyStamp = "95b42c22-4169-4a19-9248-c79da67f3169",
-                            Name = "testAdmin",
-                            NormalizedName = "ADMIN"
-                        });
-                });
-
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -172,12 +172,15 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("MyPersonId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("MyPersonId");
 
                     b.ToTable("EntityCards");
                 });
@@ -212,7 +215,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EntityUsers");
+                    b.ToTable("EntityPerson");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -339,9 +342,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 {
                     b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", "MyPerson")
                         .WithMany("Cards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MyPersonId");
 
                     b.Navigation("MyPerson");
                 });

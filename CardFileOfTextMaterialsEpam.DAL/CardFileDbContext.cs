@@ -13,7 +13,7 @@ namespace CardFileOfTextMaterialsEpam.DAL
 
         public DbSet<Book> EntityBooks { get; set; }
         public DbSet<Card> EntityCards { get; set; }
-        public DbSet<MyPerson> EntityUsers { get; set; }
+        public DbSet<MyPerson> EntityPerson { get; set; }
         public DbSet<Category> EntityCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -32,7 +32,7 @@ namespace CardFileOfTextMaterialsEpam.DAL
                         Id = 2,
                         Name = "testAdmin",
                         NormalizedName = "ADMIN"
-                    }
+                    }//TODO MAKE CLASS TO FILL TEST DATABASE INFO
                 );
         }
     }

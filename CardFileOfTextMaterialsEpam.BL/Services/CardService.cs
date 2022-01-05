@@ -1,43 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CardFileOfTextMaterialsEpam.BL.Interfaces;
 using CardFileOfTextMaterialsEpam.BL.Models;
+using CardFileOfTextMaterialsEpam.DAL.Entities;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
 
 namespace CardFileOfTextMaterialsEpam.BL.Services {
 	public class CardService:ICardService {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public CardService(IUnitOfWork unitOfWork, Mapper mapper)
+        public CardService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public IEnumerable<CardModel> GetAll()
+        public Task<IEnumerable<CardModel>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            var book = _mapper.Map<IEnumerable<Card>, IEnumerable<CardModel>>(_unitOfWork.CardRepository.GetAll());
+            return Task.FromResult(book);
         }
-
         public Task<CardModel> GetByIdAsync(int id)
         {
-            throw new System.NotImplementedException();
+            var card = _mapper.Map<IEnumerable<Card>, IEnumerable<CardModel>>(_unitOfWork.CardRepository.GetAll())
+                .FirstOrDefault(x => x.Id == id);
+            return Task.FromResult(card);
         }
 
         public Task AddAsync(CardModel model)
         {
-            throw new System.NotImplementedException();
+            var card = _mapper.Map<CardModel, Card>(model);
+            _unitOfWork.CardRepository.Update(card);
+            _unitOfWork.SaveAsync();
+            return Task.CompletedTask;
         }
+
 
         public Task UpdateAsync(CardModel model)
         {
-            throw new System.NotImplementedException();
+            var card = _mapper.Map<CardModel, Card>(model);
+            _unitOfWork.CardRepository.Update(card);
+            _unitOfWork.SaveAsync();
+            return Task.CompletedTask;
         }
 
         public Task DeleteByIdAsync(int modelId)
         {
-            throw new System.NotImplementedException();
+            var model = GetByIdAsync(modelId).Result;
+            var card = _mapper.Map<CardModel, Card>(model);
+            _unitOfWork.CardRepository.Delete(card.Id);
+            return Task.CompletedTask;
         }
     }
 }

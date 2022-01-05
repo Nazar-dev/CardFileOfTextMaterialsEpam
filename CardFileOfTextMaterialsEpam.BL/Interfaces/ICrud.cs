@@ -7,7 +7,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Interfaces
 {
     public interface ICrud<TModel> where TModel : class
     {
-        IEnumerable<TModel> GetAll();
+        Task<IEnumerable<TModel>> GetAllAsync();
 
         Task<TModel> GetByIdAsync(int id);
 
