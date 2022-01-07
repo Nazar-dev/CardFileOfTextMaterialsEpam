@@ -21,13 +21,13 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
         }
         public Task<IEnumerable<MyPersonModel>> GetAllAsync()
         {
-            var book = _mapper.Map<IEnumerable<MyPerson>, IEnumerable<MyPersonModel>>(_unitOfWork.UserRepository.GetAll());
+            var book = _mapper.Map<IEnumerable<MyPerson>, IEnumerable<MyPersonModel>>(_unitOfWork.PersonRepository.GetAll());
             return Task.FromResult(book);
         }
 
         public Task<MyPersonModel> GetByIdAsync(int id)
         {
-            var person = _mapper.Map<IEnumerable<MyPerson>, IEnumerable<MyPersonModel>>(_unitOfWork.UserRepository.GetAll())
+            var person = _mapper.Map<IEnumerable<MyPerson>, IEnumerable<MyPersonModel>>(_unitOfWork.PersonRepository.GetAll())
                 .FirstOrDefault(x => x.Id == id);
             return Task.FromResult(person);
         }
@@ -36,7 +36,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
         {
             if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileExeption();
             var person = _mapper.Map<MyPersonModel, MyPerson>(model);
-            _unitOfWork.UserRepository.Update(person);
+            _unitOfWork.PersonRepository.Update(person);
             _unitOfWork.SaveAsync();
             return Task.CompletedTask;
         }
@@ -52,7 +52,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
         {
             if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileExeption();
             var person = _mapper.Map<MyPersonModel, MyPerson>(model);
-            _unitOfWork.UserRepository.Update(person);
+            _unitOfWork.PersonRepository.Update(person);
             _unitOfWork.SaveAsync();
             return Task.CompletedTask;
         }
@@ -61,7 +61,8 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
         {
             var model = GetByIdAsync(modelId).Result;
             var person = _mapper.Map<MyPersonModel, MyPerson>(model);
-            _unitOfWork.UserRepository.Delete(person.Id);
+            _unitOfWork.PersonRepository.Delete(person.Id);
+            _unitOfWork.SaveAsync();
             return Task.CompletedTask;
         }
     }

@@ -52,6 +52,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
             var model = GetByIdAsync(modelId).Result;
             var card = _mapper.Map<CardModel, Card>(model);
             _unitOfWork.CardRepository.Delete(card.Id);
+            _unitOfWork.SaveAsync();
             return Task.CompletedTask;
         }
     }

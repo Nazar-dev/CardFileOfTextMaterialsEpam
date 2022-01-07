@@ -2,7 +2,7 @@
 using CardFileOfTextMaterialsEpam.DAL.Repositories;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Interfaces {
-	public interface IUserRepository:IRepository<MyPerson> {
+	public interface IPersonRepository:IRepository<MyPerson> {
 		
 	}
 }

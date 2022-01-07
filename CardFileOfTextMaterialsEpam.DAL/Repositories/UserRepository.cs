@@ -6,7 +6,7 @@ using CardFileOfTextMaterialsEpam.DAL.Entities;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
-	public class UserRepository:IUserRepository {
+	public class UserRepository:IPersonRepository {
 		private readonly CardFileDbContext _context;
 		public UserRepository(CardFileDbContext context) {
 			_context = context;

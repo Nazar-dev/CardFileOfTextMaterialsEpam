@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Entities {
 	public class Card:Entity {
-		
+		[ForeignKey(nameof(BookId))]
 		public int BookId { get; set; }
-        public int UserId { get; set; }
-        public MyPerson MyPerson { get; set; }
         public ICollection<Book> Books { get; set; }
 		
 	}

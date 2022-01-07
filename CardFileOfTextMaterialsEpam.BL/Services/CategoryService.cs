@@ -35,13 +35,12 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             return Task.FromResult(category);
         }
 
-        public Task AddAsync(CategoryModel model)
+        public async Task AddAsync(CategoryModel model)
         {
             if (!Check(model.Name)) throw new CardFileExeption();
             var category = _mapper.Map<CategoryModel, Category>(model);
             _unitOfWork.CategoryRepository.Update(category);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+            await _unitOfWork.SaveAsync();
         }
 
         private bool Check(string name)
@@ -60,12 +59,12 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             return Task.CompletedTask;
         }
 
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
             var model = GetByIdAsync(modelId).Result;
             var category = _mapper.Map<CategoryModel, Category>(model);
             _unitOfWork.CategoryRepository.Delete(category.Id);
-            return Task.CompletedTask;
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Interfaces {
 
 		ICardRepository CardRepository { get; }
 		ICategoryRepository CategoryRepository { get; }
-		IUserRepository UserRepository { get; }
+		IPersonRepository PersonRepository { get; }
 		Task<int> SaveAsync();
 	}
 }

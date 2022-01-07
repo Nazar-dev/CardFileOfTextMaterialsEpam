@@ -12,7 +12,7 @@ namespace CardFileOfTextMaterialsEpam.DAL {
 		
 		private ICategoryRepository _categoryRepository;
 		
-		private IUserRepository _userRepository;
+		private IPersonRepository _personRepository;
 		
 		public UnitOfWork(CardFileDbContext context) {
 			_context = context;
@@ -48,12 +48,13 @@ namespace CardFileOfTextMaterialsEpam.DAL {
 			}
 		}
 
-		public IUserRepository UserRepository
+
+        public IPersonRepository PersonRepository
 		{
 			get
 			{
-				this._userRepository ??= new UserRepository(_context);
-				return _userRepository;
+				this._personRepository ??= new UserRepository(_context);
+				return _personRepository;
 			}
 		}
 		

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 {
     [DbContext(typeof(CardFileDbContext))]
-    [Migration("20220105094408_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220107113638_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,14 +53,14 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "930bb2db-0330-4f6e-8e53-04ceaf88a206",
+                            ConcurrencyStamp = "575f1161-5c04-486f-aaca-30a9b209146d",
                             Name = "testUser",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "26fcac7e-4891-4dd5-ac9b-365a4547f2e0",
+                            ConcurrencyStamp = "d74e2ba0-d17c-4c8b-9c94-27d8e40950d0",
                             Name = "testAdmin",
                             NormalizedName = "ADMIN"
                         });
@@ -149,7 +149,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<string>("BookName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CardId")
+                    b.Property<int?>("CardId")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -175,9 +175,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("MyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -208,6 +205,9 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -323,30 +323,24 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Book", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Card", "Card")
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Card", null)
                         .WithMany("Books")
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CardId");
 
                     b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Category", "Category")
-                        .WithMany("BookCollection")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Card");
 
                     b.Navigation("Category");
                 });
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Card", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", "MyPerson")
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", null)
                         .WithMany("Cards")
                         .HasForeignKey("MyPersonId");
-
-                    b.Navigation("MyPerson");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -403,11 +397,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Card", b =>
                 {
                     b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Category", b =>
-                {
-                    b.Navigation("BookCollection");
                 });
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", b =>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,7 +70,8 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CardId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,7 +191,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
                     MyPersonId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -211,8 +211,8 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CardId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CardId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,7 +222,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         column: x => x.CardId,
                         principalTable: "EntityCards",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_EntityBooks_EntityCategories_CategoryId",
                         column: x => x.CategoryId,
@@ -234,12 +234,12 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "930bb2db-0330-4f6e-8e53-04ceaf88a206", "testUser", "USER" });
+                values: new object[] { 1, "575f1161-5c04-486f-aaca-30a9b209146d", "testUser", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "26fcac7e-4891-4dd5-ac9b-365a4547f2e0", "testAdmin", "ADMIN" });
+                values: new object[] { 2, "d74e2ba0-d17c-4c8b-9c94-27d8e40950d0", "testAdmin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

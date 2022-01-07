@@ -36,13 +36,14 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             return Task.FromResult(book);
         }
 
-        public Task AddAsync(BookModel model)
+        public async Task AddAsync(BookModel model)
         {
             if (!Check(model.BookName)) throw new CardFileExeption();
             var reader = _mapper.Map<BookModel, Book>(model);
             _unitOfWork.BookRepository.Create(reader);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+
+            var res = await _unitOfWork.SaveAsync();
+
         }
 
         private bool Check(string name)
@@ -52,21 +53,20 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             return true;
         }
 
-        public Task UpdateAsync(BookModel model)
+        public async  Task UpdateAsync(BookModel model)
         {
             if (!Check(model.BookName)) throw new CardFileExeption();
             var reader = _mapper.Map<BookModel, Book>(model);
             _unitOfWork.BookRepository.Update(reader);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
             var model = GetByIdAsync(modelId).Result;
             var reader = _mapper.Map<BookModel, Book>(model);
             _unitOfWork.BookRepository.Delete(reader.Id);
-            return Task.CompletedTask;
+            await _unitOfWork.SaveAsync();
         }
     }
 }

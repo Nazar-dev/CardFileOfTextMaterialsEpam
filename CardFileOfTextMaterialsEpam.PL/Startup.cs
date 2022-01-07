@@ -62,7 +62,7 @@ namespace CardFileOfTextMaterialsEpam.PL {
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPersonRepository, UserRepository>();
 
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
