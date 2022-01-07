@@ -5,10 +5,12 @@ using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Entities {
-	public class Card:Entity {
+	public class Card {
+		[Key] 
+        public int CardId { get; set; }
 		[ForeignKey(nameof(BookId))]
 		public int BookId { get; set; }
-        public ICollection<Book> Books { get; set; }
+        public Book Book { get; set; }
 		
 	}
 }

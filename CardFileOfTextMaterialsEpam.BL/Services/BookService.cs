@@ -32,7 +32,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         public Task<BookModel> GetByIdAsync(int id)
         {
             var book = _mapper.Map<IEnumerable<Book>, IEnumerable<BookModel>>(_unitOfWork.BookRepository.GetAll())
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefault(x => x.BookId == id);
             return Task.FromResult(book);
         }
 
@@ -64,8 +64,8 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         public async Task DeleteByIdAsync(int modelId)
         {
             var model = GetByIdAsync(modelId).Result;
-            var reader = _mapper.Map<BookModel, Book>(model);
-            _unitOfWork.BookRepository.Delete(reader.Id);
+            var reader= _mapper.Map<BookModel, Book>(model);
+            _unitOfWork.BookRepository.Delete(reader.BookId);
             await _unitOfWork.SaveAsync();
         }
     }

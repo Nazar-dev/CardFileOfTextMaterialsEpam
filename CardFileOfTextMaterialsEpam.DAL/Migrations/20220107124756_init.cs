@@ -51,31 +51,16 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntityCategories",
+                name: "ECategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EntityPerson",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CardId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EntityPerson", x => x.Id);
+                    table.PrimaryKey("PK_ECategories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,61 +170,74 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntityCards",
+                name: "EBooks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    BookId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    MyPersonId = table.Column<int>(type: "int", nullable: true)
+                    BookName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityCards", x => x.Id);
+                    table.PrimaryKey("PK_EBooks", x => x.BookId);
                     table.ForeignKey(
-                        name: "FK_EntityCards_EntityPerson_MyPersonId",
-                        column: x => x.MyPersonId,
-                        principalTable: "EntityPerson",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_EBooks_ECategories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "ECategories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntityBooks",
+                name: "ECards",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    CardId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    CardId = table.Column<int>(type: "int", nullable: true)
+                    BookId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityBooks", x => x.Id);
+                    table.PrimaryKey("PK_ECards", x => x.CardId);
                     table.ForeignKey(
-                        name: "FK_EntityBooks_EntityCards_CardId",
+                        name: "FK_ECards_EBooks_BookId",
+                        column: x => x.BookId,
+                        principalTable: "EBooks",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EPersons",
+                columns: table => new
+                {
+                    PersonId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EPersons", x => x.PersonId);
+                    table.ForeignKey(
+                        name: "FK_EPersons_ECards_CardId",
                         column: x => x.CardId,
-                        principalTable: "EntityCards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_EntityBooks_EntityCategories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "EntityCategories",
-                        principalColumn: "Id",
+                        principalTable: "ECards",
+                        principalColumn: "CardId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "575f1161-5c04-486f-aaca-30a9b209146d", "testUser", "USER" });
+                values: new object[] { 1, "d19dd419-8371-4bf3-86aa-1e2cd5ff69ec", "testUser", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "d74e2ba0-d17c-4c8b-9c94-27d8e40950d0", "testAdmin", "ADMIN" });
+                values: new object[] { 2, "d146ea6c-d6f9-48a2-afec-95ecc731b444", "testAdmin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -281,19 +279,19 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityBooks_CardId",
-                table: "EntityBooks",
-                column: "CardId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EntityBooks_CategoryId",
-                table: "EntityBooks",
+                name: "IX_EBooks_CategoryId",
+                table: "EBooks",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityCards_MyPersonId",
-                table: "EntityCards",
-                column: "MyPersonId");
+                name: "IX_ECards_BookId",
+                table: "ECards",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EPersons_CardId",
+                table: "EPersons",
+                column: "CardId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -314,7 +312,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "EntityBooks");
+                name: "EPersons");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -323,13 +321,13 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "EntityCards");
+                name: "ECards");
 
             migrationBuilder.DropTable(
-                name: "EntityCategories");
+                name: "EBooks");
 
             migrationBuilder.DropTable(
-                name: "EntityPerson");
+                name: "ECategories");
         }
     }
 }

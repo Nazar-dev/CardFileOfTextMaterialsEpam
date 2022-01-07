@@ -31,7 +31,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         public Task<CategoryModel> GetByIdAsync(int id)
         {
             var category = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryModel>>(_unitOfWork.CategoryRepository.GetAll())
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefault(x => x.CategoryId == id);
             return Task.FromResult(category);
         }
 
@@ -39,7 +39,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         {
             if (!Check(model.Name)) throw new CardFileExeption();
             var category = _mapper.Map<CategoryModel, Category>(model);
-            _unitOfWork.CategoryRepository.Update(category);
+            _unitOfWork.CategoryRepository.Create(category);
             await _unitOfWork.SaveAsync();
         }
 
@@ -50,20 +50,19 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             return true;
         }
 
-        public Task UpdateAsync(CategoryModel model)
+        public async Task UpdateAsync(CategoryModel model)
         {
             if (!Check(model.Name)) throw new CardFileExeption();
             var category = _mapper.Map<CategoryModel, Category>(model);
             _unitOfWork.CategoryRepository.Update(category);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task DeleteByIdAsync(int modelId)
         {
             var model = GetByIdAsync(modelId).Result;
             var category = _mapper.Map<CategoryModel, Category>(model);
-            _unitOfWork.CategoryRepository.Delete(category.Id);
+            _unitOfWork.CategoryRepository.Delete(category.CategoryId);
             await _unitOfWork.SaveAsync();
         }
     }

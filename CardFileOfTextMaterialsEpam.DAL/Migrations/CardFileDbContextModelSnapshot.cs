@@ -51,14 +51,14 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "575f1161-5c04-486f-aaca-30a9b209146d",
+                            ConcurrencyStamp = "d19dd419-8371-4bf3-86aa-1e2cd5ff69ec",
                             Name = "testUser",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "d74e2ba0-d17c-4c8b-9c94-27d8e40950d0",
+                            ConcurrencyStamp = "d146ea6c-d6f9-48a2-afec-95ecc731b444",
                             Name = "testAdmin",
                             NormalizedName = "ADMIN"
                         });
@@ -139,7 +139,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BookId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -147,24 +147,19 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<string>("BookName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CardId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CardId");
+                    b.HasKey("BookId");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("EntityBooks");
+                    b.ToTable("EBooks");
                 });
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Card", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CardId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -172,19 +167,16 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MyPersonId")
-                        .HasColumnType("int");
+                    b.HasKey("CardId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("BookId");
 
-                    b.HasIndex("MyPersonId");
-
-                    b.ToTable("EntityCards");
+                    b.ToTable("ECards");
                 });
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -192,14 +184,14 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
-                    b.ToTable("EntityCategories");
+                    b.ToTable("ECategories");
                 });
 
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", b =>
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Person", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -213,9 +205,11 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("PersonId");
 
-                    b.ToTable("EntityPerson");
+                    b.HasIndex("CardId");
+
+                    b.ToTable("EPersons");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -321,10 +315,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Book", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Card", null)
-                        .WithMany("Books")
-                        .HasForeignKey("CardId");
-
                     b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
@@ -336,9 +326,24 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Card", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", null)
-                        .WithMany("Cards")
-                        .HasForeignKey("MyPersonId");
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Person", b =>
+                {
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Card", "Card")
+                        .WithMany()
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Card");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -390,16 +395,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Card", b =>
-                {
-                    b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.MyPerson", b =>
-                {
-                    b.Navigation("Cards");
                 });
 #pragma warning restore 612, 618
         }

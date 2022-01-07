@@ -19,7 +19,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<MyPersonModel>> GetAllPerson()
+        public async Task<IEnumerable<PersonModel>> GetAllPerson()
         {
 
             try
@@ -32,7 +32,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<MyPersonModel> GetPersonById(int id)
+        public async Task<PersonModel> GetPersonById(int id)
         {
             try
             {
@@ -44,16 +44,16 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePerson([FromBody] MyPersonModel MyPersonModel)
+        public async Task<IActionResult> CreatePerson([FromBody] PersonModel personModel)
         {
-            if (MyPersonModel == null)
+            if (personModel == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _myPersonService.AddAsync(MyPersonModel);
+                await _myPersonService.AddAsync(personModel);
                 return new EmptyResult();
             }
             catch (Exception e)
@@ -63,7 +63,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePerson([FromBody] MyPersonModel model)
+        public async Task<IActionResult> UpdatePerson([FromBody] PersonModel model)
         {
             if (model == null)
             {

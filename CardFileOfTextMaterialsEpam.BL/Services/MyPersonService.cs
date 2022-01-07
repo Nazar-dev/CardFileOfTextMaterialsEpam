@@ -8,6 +8,7 @@ using CardFileOfTextMaterialsEpam.BL.Models;
 using CardFileOfTextMaterialsEpam.BL.Validation;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
+using Microsoft.Extensions.Localization.Internal;
 
 namespace CardFileOfTextMaterialsEpam.BL.Services {
 	public class MyPersonService:IMyPersonService {
@@ -19,26 +20,25 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public Task<IEnumerable<MyPersonModel>> GetAllAsync()
+        public Task<IEnumerable<PersonModel>> GetAllAsync()
         {
-            var book = _mapper.Map<IEnumerable<MyPerson>, IEnumerable<MyPersonModel>>(_unitOfWork.PersonRepository.GetAll());
+            var book = _mapper.Map<IEnumerable<Person>, IEnumerable<PersonModel>>(_unitOfWork.PersonRepository.GetAll());
             return Task.FromResult(book);
         }
 
-        public Task<MyPersonModel> GetByIdAsync(int id)
+        public Task<PersonModel> GetByIdAsync(int id)
         {
-            var person = _mapper.Map<IEnumerable<MyPerson>, IEnumerable<MyPersonModel>>(_unitOfWork.PersonRepository.GetAll())
-                .FirstOrDefault(x => x.Id == id);
+            var person = _mapper.Map<IEnumerable<Person>, IEnumerable<PersonModel>>(_unitOfWork.PersonRepository.GetAll())
+                .FirstOrDefault(x => x.PersonId == id);
             return Task.FromResult(person);
         }
 
-        public Task AddAsync(MyPersonModel model)
+        public async Task AddAsync(PersonModel model)
         {
             if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileExeption();
-            var person = _mapper.Map<MyPersonModel, MyPerson>(model);
-            _unitOfWork.PersonRepository.Update(person);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+            var person = _mapper.Map<PersonModel, Person>(model);
+            _unitOfWork.PersonRepository.Create(person);
+            await _unitOfWork.SaveAsync();
         }
 
         private bool Check(string name)
@@ -48,22 +48,20 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
             return true;
         }
 
-        public Task UpdateAsync(MyPersonModel model)
+        public async Task UpdateAsync(PersonModel model)
         {
             if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileExeption();
-            var person = _mapper.Map<MyPersonModel, MyPerson>(model);
+            var person = _mapper.Map<PersonModel, Person>(model);
             _unitOfWork.PersonRepository.Update(person);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+           await _unitOfWork.SaveAsync();
         }
 
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
             var model = GetByIdAsync(modelId).Result;
-            var person = _mapper.Map<MyPersonModel, MyPerson>(model);
-            _unitOfWork.PersonRepository.Delete(person.Id);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+            var person = _mapper.Map<PersonModel, Person>(model);
+            _unitOfWork.PersonRepository.Delete(person.PersonId);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

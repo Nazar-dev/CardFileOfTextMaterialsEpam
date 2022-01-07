@@ -12,15 +12,17 @@ namespace CardFileOfTextMaterialsEpam.BL
         public AutoMapperProfile()
         {
             CreateMap<Book, BookModel>().ReverseMap();
-            CreateMap<Category, CategoryModel>().ReverseMap();
-            CreateMap<Card, CardModel>()
-                .ForMember(c => c.BooksIds, 
-                p => p.MapFrom(book => book.Books.Select(x=>x.Id)))
-                .ReverseMap();
-
-            CreateMap<MyPerson,MyPersonModel>()
-                .ForMember(u => u.CardIds,
-                    b => b.MapFrom(user => user.Cards.Select(x=>x.Id))).ReverseMap();
+            CreateMap<Category, CategoryModel>().ReverseMap();           
+            CreateMap<Card, CardModel>().ReverseMap();
+            CreateMap<Person, PersonModel>().ReverseMap();
+            // CreateMap<Card, CardModel>()
+            //     .ForMember(c => c.BooksIds, 
+            //     p => p.MapFrom(book => book.Books.Select(x=>x.BookId)))
+            //     .ReverseMap();
+            //
+            // CreateMap<Person,PersonModel>()
+            //     .ForMember(u => u.CardIds,
+            //         b => b.MapFrom(user => user.Cards.Select(x=>x.CardId))).ReverseMap();
             CreateMap<UserSignUpModel, User>()
                 .ForMember(u => u.UserName,
                     opt => opt.MapFrom(ur => ur.Email));

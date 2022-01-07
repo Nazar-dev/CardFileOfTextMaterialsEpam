@@ -53,7 +53,7 @@ namespace CardFileOfTextMaterialsEpam.DAL {
 		{
 			get
 			{
-				this._personRepository ??= new UserRepository(_context);
+				this._personRepository ??= new PersonRepository(_context);
 				return _personRepository;
 			}
 		}

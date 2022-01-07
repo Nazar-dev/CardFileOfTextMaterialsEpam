@@ -26,34 +26,31 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
         public Task<CardModel> GetByIdAsync(int id)
         {
             var card = _mapper.Map<IEnumerable<Card>, IEnumerable<CardModel>>(_unitOfWork.CardRepository.GetAll())
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefault(x => x.CardId == id);
             return Task.FromResult(card);
         }
 
-        public Task AddAsync(CardModel model)
+        public async Task AddAsync(CardModel model)
         {
             var card = _mapper.Map<CardModel, Card>(model);
-            _unitOfWork.CardRepository.Update(card);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+            _unitOfWork.CardRepository.Create(card);
+            await _unitOfWork.SaveAsync();
         }
 
 
-        public Task UpdateAsync(CardModel model)
+        public async Task UpdateAsync(CardModel model)
         {
             var card = _mapper.Map<CardModel, Card>(model);
             _unitOfWork.CardRepository.Update(card);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+           await _unitOfWork.SaveAsync();
         }
 
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
             var model = GetByIdAsync(modelId).Result;
             var card = _mapper.Map<CardModel, Card>(model);
-            _unitOfWork.CardRepository.Delete(card.Id);
-            _unitOfWork.SaveAsync();
-            return Task.CompletedTask;
+            _unitOfWork.CardRepository.Delete(card.CardId);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

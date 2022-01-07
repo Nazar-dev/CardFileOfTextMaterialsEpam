@@ -11,10 +11,10 @@ namespace CardFileOfTextMaterialsEpam.DAL
         {
         }
 
-        public DbSet<Book> EntityBooks { get; set; }
-        public DbSet<Card> EntityCards { get; set; }
-        public DbSet<MyPerson> EntityPerson { get; set; }
-        public DbSet<Category> EntityCategories { get; set; }
+        public DbSet<Book> EBooks { get; set; }
+        public DbSet<Card> ECards { get; set; }
+        public DbSet<Person> EPersons { get; set; }
+        public DbSet<Category> ECategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
