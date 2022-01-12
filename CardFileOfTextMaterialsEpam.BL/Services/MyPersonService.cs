@@ -35,7 +35,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
 
         public async Task AddAsync(PersonModel model)
         {
-            if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileExeption();
+            if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileException();
             var person = _mapper.Map<PersonModel, Person>(model);
             _unitOfWork.PersonRepository.Create(person);
             await _unitOfWork.SaveAsync();
@@ -50,7 +50,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services {
 
         public async Task UpdateAsync(PersonModel model)
         {
-            if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileExeption();
+            if (!Check(model.Name) && !Check(model.Surname)) throw new CardFileException();
             var person = _mapper.Map<PersonModel, Person>(model);
             _unitOfWork.PersonRepository.Update(person);
            await _unitOfWork.SaveAsync();

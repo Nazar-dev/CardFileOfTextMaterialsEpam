@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 {
     [DbContext(typeof(CardFileDbContext))]
-    [Migration("20220107124756_init")]
-    partial class init
+    [Migration("20220112133226_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,14 +53,14 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "d19dd419-8371-4bf3-86aa-1e2cd5ff69ec",
+                            ConcurrencyStamp = "70008727-4a9b-412d-9530-1b4d0f510d9e",
                             Name = "testUser",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "d146ea6c-d6f9-48a2-afec-95ecc731b444",
+                            ConcurrencyStamp = "b0f0b99b-2ef3-4079-806e-bb69e9842dcc",
                             Name = "testAdmin",
                             NormalizedName = "ADMIN"
                         });
@@ -201,15 +201,17 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<int>("CardId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("PersonId");
 
                     b.HasIndex("CardId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("EPersons");
                 });
@@ -345,7 +347,13 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Card");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

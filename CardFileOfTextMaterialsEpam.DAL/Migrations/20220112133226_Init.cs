@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -214,13 +214,19 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 {
                     PersonId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CardId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EPersons", x => x.PersonId);
+                    table.ForeignKey(
+                        name: "FK_EPersons_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_EPersons_ECards_CardId",
                         column: x => x.CardId,
@@ -232,12 +238,12 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "d19dd419-8371-4bf3-86aa-1e2cd5ff69ec", "testUser", "USER" });
+                values: new object[] { 1, "70008727-4a9b-412d-9530-1b4d0f510d9e", "testUser", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "d146ea6c-d6f9-48a2-afec-95ecc731b444", "testAdmin", "ADMIN" });
+                values: new object[] { 2, "b0f0b99b-2ef3-4079-806e-bb69e9842dcc", "testAdmin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -292,6 +298,11 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 name: "IX_EPersons_CardId",
                 table: "EPersons",
                 column: "CardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EPersons_UserId",
+                table: "EPersons",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

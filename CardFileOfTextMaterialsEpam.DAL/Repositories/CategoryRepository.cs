@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
+using CardFileOfTextMaterialsEpam.DAL.Validation;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 	public class CategoryRepository:ICategoryRepository {
@@ -20,7 +21,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 		}
 		public void Create(Category item) {
 			if (_context.ECategories.Any(x => x.CategoryId == item.CategoryId))
-				throw new Exception(); // TODO display on webpage eror
+				throw new RepositoryException(); 
 			_context.ECategories.Add(item);
 		}
 		public void Update(Category item) {

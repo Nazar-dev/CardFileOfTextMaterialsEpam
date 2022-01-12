@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CardFileOfTextMaterialsEpam.BL;
-using CardFileOfTextMaterialsEpam.BL.Auth;
 using CardFileOfTextMaterialsEpam.BL.Interfaces;
 using CardFileOfTextMaterialsEpam.BL.Models;
+using CardFileOfTextMaterialsEpam.BL.Models.Auth;
 using CardFileOfTextMaterialsEpam.BL.Services;
 using CardFileOfTextMaterialsEpam.DAL;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
+using CardFileOfTextMaterialsEpam.DAL.Entities.Auth;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
 using CardFileOfTextMaterialsEpam.DAL.Repositories;
 using CardFileOfTextMaterialsEpam.PL.Extention;
@@ -75,7 +76,6 @@ namespace CardFileOfTextMaterialsEpam.PL {
 
             
 
-            //TODO ADD AUTH SERVICES
 
 
 

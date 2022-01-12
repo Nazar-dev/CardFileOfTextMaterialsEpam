@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
+using CardFileOfTextMaterialsEpam.DAL.Validation;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 	public class BookRepository:IBookRepository {
@@ -19,7 +20,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 		}
 		public void Create(Book item) {
 			if (_context.EBooks.Any(x => x.BookId == item.BookId))
-				throw new Exception(); // TODO display on webpage eror
+				throw new RepositoryException();
 			_context.EBooks.Add(item);
 		}
 		public void Update(Book item) {

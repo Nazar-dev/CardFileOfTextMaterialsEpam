@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using AutoMapper;
-using CardFileOfTextMaterialsEpam.BL.Auth;
 using CardFileOfTextMaterialsEpam.BL.Models;
+using CardFileOfTextMaterialsEpam.BL.Models.Auth;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
+using CardFileOfTextMaterialsEpam.DAL.Entities.Auth;
 
 
 namespace CardFileOfTextMaterialsEpam.BL

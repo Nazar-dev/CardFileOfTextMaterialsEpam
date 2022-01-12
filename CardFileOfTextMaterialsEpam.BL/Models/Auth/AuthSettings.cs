@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using CardFileOfTextMaterialsEpam.BL.Auth;
+using CardFileOfTextMaterialsEpam.DAL.Entities.Auth;
 
 namespace CardFileOfTextMaterialsEpam.BL.Models.Auth
 {
@@ -11,11 +11,8 @@ namespace CardFileOfTextMaterialsEpam.BL.Models.Auth
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
-        public string About { get; set; }
-        public string Gender { get; set; }
         public string PhoneNumber { get; set; }
         public string Role { get; set; }
-        public string RegisterDate { get; set; }
         public string Token { get; set; }
 
         public AuthSettings(User user, string role)

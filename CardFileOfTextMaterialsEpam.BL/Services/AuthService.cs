@@ -6,11 +6,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using CardFileOfTextMaterialsEpam.BL.Auth;
 using CardFileOfTextMaterialsEpam.BL.Interfaces;
 using CardFileOfTextMaterialsEpam.BL.Models;
 using CardFileOfTextMaterialsEpam.BL.Models.Auth;
+using CardFileOfTextMaterialsEpam.BL.Validation;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
+using CardFileOfTextMaterialsEpam.DAL.Entities.Auth;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +66,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             if (user is null)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                throw new ArgumentNullException();
+                throw new AuthorizationException();
             }
 
             var userSigninResult = await _userManager.CheckPasswordAsync(user, userLoginModel.Password);
@@ -84,7 +85,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         {
             if (string.IsNullOrWhiteSpace(roleName))
             {
-                throw new ArgumentNullException();
+                throw new AuthorizationException();
             }
 
             var newRole = new Role
@@ -107,7 +108,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.UserName == userEmail);
             if (user is null)
             {
-                throw new NullReferenceException();
+                throw new AuthorizationException();
             }
 
             var result = await _userManager.AddToRoleAsync(user, roleName);
@@ -127,7 +128,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
                     u.Email == user.Email && u.LastName == user.LastName);
             if (resUser is null)
             {
-                throw new ArgumentNullException();
+                throw new AuthorizationException();
             }
 
             if (!string.IsNullOrEmpty(user.PasswordHash))
@@ -146,7 +147,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == id);
             if (user is null)
             {
-                throw new ArgumentNullException();
+                throw new AuthorizationException();
             }
 
             await _userManager.DeleteAsync(user);
@@ -170,7 +171,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == id);
             if (user is null)
             {
-                throw new ArgumentNullException("User not found");
+                throw new AuthorizationException("User not found");
             }
 
             var userRes = _mapper.Map<User>(user);
@@ -182,7 +183,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == email);
             if (user is null)
             {
-                throw new ArgumentNullException();
+                throw new AuthorizationException();
             }
 
             var resUser = _mapper.Map<User>(user);
@@ -193,7 +194,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == email);
             if (user is null)
             {
-                throw new ArgumentNullException("User not found");
+                throw new AuthorizationException("User not found");
             }
             var roles = await _userManager.GetRolesAsync(user);
             return roles;
@@ -203,7 +204,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == email);
             if (user is null)
             {
-                throw new ArgumentNullException("User not found");
+                throw new AuthorizationException("User not found");
             }
 
             var cadrs =  _unitOfWork.PersonRepository.GetAll();

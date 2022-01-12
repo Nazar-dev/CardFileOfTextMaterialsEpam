@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CardFileOfTextMaterialsEpam.BL.Models
+﻿namespace CardFileOfTextMaterialsEpam.BL.Models.Auth
 {
     public class JwtSettings
     {

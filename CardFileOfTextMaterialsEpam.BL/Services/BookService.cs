@@ -38,7 +38,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
 
         public async Task AddAsync(BookModel model)
         {
-            if (!Check(model.BookName)) throw new CardFileExeption();
+            if (!Check(model.BookName)) throw new CardFileException();
             var reader = _mapper.Map<BookModel, Book>(model);
             _unitOfWork.BookRepository.Create(reader);
 
@@ -55,7 +55,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
 
         public async  Task UpdateAsync(BookModel model)
         {
-            if (!Check(model.BookName)) throw new CardFileExeption();
+            if (!Check(model.BookName)) throw new CardFileException();
             var reader = _mapper.Map<BookModel, Book>(model);
             _unitOfWork.BookRepository.Update(reader);
             await _unitOfWork.SaveAsync();

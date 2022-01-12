@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Xml.XPath;
 using CardFileOfTextMaterialsEpam.DAL.Entities;
 using CardFileOfTextMaterialsEpam.DAL.Interfaces;
+using CardFileOfTextMaterialsEpam.DAL.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
@@ -23,11 +25,12 @@ namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 		}
 		public void Create(Person item) {
 			if (_context.EPersons.Any(x => x.PersonId == item.PersonId))
-				throw new Exception(); 
+				throw new RepositoryException(); 
 			_context.EPersons.Add(item);
 		}
 		public void Update(Person item) {
 			_context.EPersons.Update(item);
+			//TODO MAKE UPDATE CORRECTLY
 		}
 
 		public void Delete(int id) {

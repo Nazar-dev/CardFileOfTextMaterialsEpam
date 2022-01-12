@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CardFileOfTextMaterialsEpam.BL.Auth;
 using CardFileOfTextMaterialsEpam.BL.Interfaces;
 using CardFileOfTextMaterialsEpam.BL.Models;
 using CardFileOfTextMaterialsEpam.BL.Models.Auth;
 using CardFileOfTextMaterialsEpam.BL.Services;
+using CardFileOfTextMaterialsEpam.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

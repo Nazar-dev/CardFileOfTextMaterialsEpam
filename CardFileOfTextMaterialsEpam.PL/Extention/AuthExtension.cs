@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using CardFileOfTextMaterialsEpam.BL.Models;
+using CardFileOfTextMaterialsEpam.BL.Models.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

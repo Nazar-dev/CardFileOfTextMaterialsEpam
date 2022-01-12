@@ -1,5 +1,5 @@
-﻿using CardFileOfTextMaterialsEpam.BL.Auth;
-using CardFileOfTextMaterialsEpam.DAL.Entities;
+﻿using CardFileOfTextMaterialsEpam.DAL.Entities;
+using CardFileOfTextMaterialsEpam.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +10,6 @@ namespace CardFileOfTextMaterialsEpam.DAL
         public CardFileDbContext(DbContextOptions<CardFileDbContext> options) : base(options)
         {
         }
-
         public DbSet<Book> EBooks { get; set; }
         public DbSet<Card> ECards { get; set; }
         public DbSet<Person> EPersons { get; set; }
@@ -32,7 +31,7 @@ namespace CardFileOfTextMaterialsEpam.DAL
                         Id = 2,
                         Name = "testAdmin",
                         NormalizedName = "ADMIN"
-                    }//TODO MAKE CLASS TO FILL TEST DATABASE INFO
+                    }
                 );
         }
     }
