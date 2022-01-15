@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 {
     [DbContext(typeof(CardFileDbContext))]
-    [Migration("20220112133226_Init")]
-    partial class Init
+    [Migration("20220113081255_Iit")]
+    partial class Iit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.13")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.BL.Auth.Role", b =>
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,20 +53,20 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "70008727-4a9b-412d-9530-1b4d0f510d9e",
-                            Name = "testUser",
+                            ConcurrencyStamp = "d3860b79-5f4b-491c-a674-9997971036fb",
+                            Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "b0f0b99b-2ef3-4079-806e-bb69e9842dcc",
-                            Name = "testAdmin",
+                            ConcurrencyStamp = "212acd8d-6fb1-48b7-899b-d7e1a18daa56",
+                            Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
                 });
 
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.BL.Auth.User", b =>
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,6 +110,9 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -135,6 +138,8 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -201,17 +206,15 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<int>("CardId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PersonId");
 
                     b.HasIndex("CardId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("EPersons");
                 });
@@ -317,6 +320,17 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.User", b =>
+                {
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Book", b =>
                 {
                     b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Category", "Category")
@@ -347,18 +361,12 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Card");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.Role", null)
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -367,7 +375,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.User", null)
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -376,7 +384,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.User", null)
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -385,13 +393,13 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.Role", null)
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.User", null)
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -400,7 +408,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.BL.Auth.User", null)
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

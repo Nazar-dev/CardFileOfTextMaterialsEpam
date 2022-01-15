@@ -56,7 +56,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _bookService.AddAsync(bookModel);
-                return new EmptyResult();
+                return new JsonResult("Added Successfully");
             }
             catch (Exception e)
             {
@@ -75,7 +75,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _bookService.UpdateAsync(model);
-                return new EmptyResult();
+                return new JsonResult("Updated Successfully");
             }
             catch (Exception e)
             {
@@ -89,7 +89,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _bookService.DeleteByIdAsync(id);
-                return new EmptyResult();
+                return new JsonResult("Deleted Successfully");
             }
             catch (Exception e)
             {

@@ -54,7 +54,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _cardService.AddAsync(cardModel);
-                return new EmptyResult();
+                return new JsonResult("Added Successfully");
             }
             catch (Exception e)
             {
@@ -73,7 +73,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _cardService.UpdateAsync(model);
-                return new EmptyResult();
+                return new JsonResult("Updated Successfully");
             }
             catch (Exception e)
             {
@@ -87,7 +87,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _cardService.DeleteByIdAsync(id);
-                return new EmptyResult();
+                return new JsonResult("Deleted Successfully");
             }
             catch (Exception e)
             {

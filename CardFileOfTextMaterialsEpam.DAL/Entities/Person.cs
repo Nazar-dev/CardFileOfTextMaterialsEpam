@@ -10,9 +10,9 @@ namespace CardFileOfTextMaterialsEpam.DAL.Entities {
 
         [Key] 
         public int PersonId { get; set; }
-        [ForeignKey(nameof(CardId))] 
-        public string Email { get; set; }
-        public virtual User User { get; set; }
+        [ForeignKey(nameof(CardId))]
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public int CardId { get; set; }
         public Card Card { get; set; }
 	}

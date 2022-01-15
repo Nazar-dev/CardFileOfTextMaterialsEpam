@@ -54,7 +54,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _categoryService.AddAsync(categoryModel);
-                return new EmptyResult();
+                return new JsonResult("Added Successfully");
             }
             catch (Exception e)
             {
@@ -73,7 +73,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _categoryService.UpdateAsync(model);
-                return new EmptyResult();
+                return new JsonResult("Updated Successfully");
             }
             catch (Exception e)
             {
@@ -87,7 +87,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _categoryService.DeleteByIdAsync(id);
-                return new EmptyResult();
+                return new JsonResult("Deleted Successfully");
             }
             catch (Exception e)
             {

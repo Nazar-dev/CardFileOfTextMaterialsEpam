@@ -23,13 +23,13 @@ namespace CardFileOfTextMaterialsEpam.DAL
                     new Role()
                     {
                         Id = 1,
-                        Name = "testUser",
+                        Name = "User",
                         NormalizedName = "USER"
                     },
                     new Role
                     {
                         Id = 2,
-                        Name = "testAdmin",
+                        Name = "Admin",
                         NormalizedName = "ADMIN"
                     }
                 );

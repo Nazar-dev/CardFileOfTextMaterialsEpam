@@ -17,7 +17,8 @@ namespace CardFileOfTextMaterialsEpam.DAL.Repositories {
 			_context = context;
 		}
 
-		public IEnumerable<Person> GetAll() {
+		public IEnumerable<Person> GetAll()
+        {
             return _context.EPersons;
 		}
 		public Person Get(int id) {

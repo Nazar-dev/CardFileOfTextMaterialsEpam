@@ -87,7 +87,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _authService.DeleteUserById(id);
-                return new EmptyResult();
+                return new JsonResult("Deleted Successfully");
             }
             catch (Exception e)
             {
@@ -102,7 +102,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             try
             {
                 await _authService.SignUp(user);
-                return new EmptyResult();
+                return new JsonResult("You are registered");
             }
             catch (Exception e)
             {
