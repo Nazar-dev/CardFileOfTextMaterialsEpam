@@ -37,7 +37,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
 
         public async Task AddAsync(CategoryModel model)
         {
-            if (!Check(model.Name)) throw new CardFileException();
+            if (!Check(model.CategoryName)) throw new CardFileException();
             var category = _mapper.Map<CategoryModel, Category>(model);
             _unitOfWork.CategoryRepository.Create(category);
             await _unitOfWork.SaveAsync();
@@ -52,7 +52,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
 
         public async Task UpdateAsync(CategoryModel model)
         {
-            if (!Check(model.Name)) throw new CardFileException();
+            if (!Check(model.CategoryName)) throw new CardFileException();
             var category = _mapper.Map<CategoryModel, Category>(model);
             _unitOfWork.CategoryRepository.Update(category);
             await _unitOfWork.SaveAsync();

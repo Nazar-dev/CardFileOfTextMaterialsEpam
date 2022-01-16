@@ -23,8 +23,8 @@ function App() {
                     </NavLink>
                 </li>
                 <li className="nav-item- m-1">
-                    <NavLink className="btn btn-light btn-outline-primary" to="/cards">
-                        Cards
+                    <NavLink className="btn btn-light btn-outline-primary" to="/books">
+                        Books
                     </NavLink>
                 </li>
                 <li className="nav-item- m-1">
@@ -37,7 +37,7 @@ function App() {
         <Switch>
             <Route path="/signin" component={Authorization}/>
             <Route path="/signup" component={Registration}/>
-            <Route path="/cards" component={SingleCard}/>
+            <Route path="/books" component={SingleCard}/>
             <Route path="/admin-user-control" component={AdminUserPage}/>
         </Switch>
 

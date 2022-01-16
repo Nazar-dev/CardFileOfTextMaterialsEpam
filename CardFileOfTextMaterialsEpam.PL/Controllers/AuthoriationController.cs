@@ -177,8 +177,8 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
             }
         }
 
-        [HttpGet("cards")]
-        public async Task<IEnumerable<CardModel>> GetUserImages([FromBody] string email)
+        [HttpGet("card")]
+        public async Task<CardModel> GetUserImages([FromBody] string email)
         {
             try
             {

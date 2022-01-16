@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 {
-    public partial class Iit : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +28,7 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 {
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,33 +96,12 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EPersons",
-                columns: table => new
-                {
-                    PersonId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CardId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EPersons", x => x.PersonId);
-                    table.ForeignKey(
-                        name: "FK_EPersons_ECards_CardId",
-                        column: x => x.CardId,
-                        principalTable: "ECards",
-                        principalColumn: "CardId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PersonId = table.Column<int>(type: "int", nullable: false),
+                    CardId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -144,10 +123,10 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_EPersons_PersonId",
-                        column: x => x.PersonId,
-                        principalTable: "EPersons",
-                        principalColumn: "PersonId",
+                        name: "FK_AspNetUsers_ECards_CardId",
+                        column: x => x.CardId,
+                        principalTable: "ECards",
+                        principalColumn: "CardId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -239,12 +218,12 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "d3860b79-5f4b-491c-a674-9997971036fb", "User", "USER" });
+                values: new object[] { 1, "86fcb0fa-335a-45e5-9611-4dd28c39e51d", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "212acd8d-6fb1-48b7-899b-d7e1a18daa56", "Admin", "ADMIN" });
+                values: new object[] { 2, "1a39842a-f97f-4e6c-8fe6-cd1c33fe70a8", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -279,9 +258,9 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_PersonId",
+                name: "IX_AspNetUsers_CardId",
                 table: "AspNetUsers",
-                column: "PersonId");
+                column: "CardId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -299,11 +278,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                 name: "IX_ECards_BookId",
                 table: "ECards",
                 column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EPersons_CardId",
-                table: "EPersons",
-                column: "CardId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -328,9 +302,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "EPersons");
 
             migrationBuilder.DropTable(
                 name: "ECards");

@@ -1,41 +1,36 @@
 import React, {useState} from "react";
 import {Button, Dropdown, Modal} from "react-bootstrap";
+import CheckCategoryName from "./CheckCategoryName";
+import {variables} from "../../../Variables/Variables";
 
 
 function ModalComp(props) {
 
     const [dropDownValue, setDropDownValue] = useState("SelectCategory");
 
-    const [textValue,setTextValue] = useState();
+    const [textValue, setTextValue] = useState();
 
     const changeValue = (text) => {
         setDropDownValue(text)
         console.log(textValue + " " + dropDownValue)
     }
 
-    const closeWindow = () =>
-    {
+    const closeWindow = () => {
         props.handleClose()
-        setTextValue(null )
+        setTextValue(null)
         setDropDownValue("SelectCategory")
-
-
     }
-    const addBookClicked = () =>
-    {
+    const addBookClicked = () => {
         props.handleClose()
-        if(textValue !== null && dropDownValue !== "SelectCategory")
-        {
-            props.createAndSendToDBBook(textValue,1)
+        if (textValue !== null && dropDownValue !== "SelectCategory") {
+            props.createAndSendToDBBook(textValue, CheckCategoryName(dropDownValue))
             props.refreshPage()
-            props.createAndSendCard(textValue,1)
-            props.refreshPage()
-        }
-        else{
+        } else {
             alert("You forgot to fill some fields.")
         }
 
     }
+
 
     return (
         <>
@@ -46,10 +41,11 @@ function ModalComp(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <div>
+
                         <h5>Enter BookName</h5>
                         <input type="text" className="form-control"
                                value={textValue}
-                               onChange={(e)=>
+                               onChange={(e) =>
                                    setTextValue(e.target.value)}
                         />
                         <h5>Select BookCategory</h5>
@@ -88,9 +84,7 @@ function ModalComp(props) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={
-
                         closeWindow
-
                     }>
                         Close
                     </Button>

@@ -15,7 +15,6 @@ namespace CardFileOfTextMaterialsEpam.BL
             CreateMap<Book, BookModel>().ReverseMap();
             CreateMap<Category, CategoryModel>().ReverseMap();           
             CreateMap<Card, CardModel>().ReverseMap();
-            CreateMap<Person, PersonModel>().ReverseMap();
             // CreateMap<Card, CardModel>()
             //     .ForMember(c => c.BooksIds, 
             //     p => p.MapFrom(book => book.Books.Select(x=>x.BookId)))

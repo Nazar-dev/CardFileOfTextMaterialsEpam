@@ -1,24 +1,34 @@
 import React, {useState, useEffect} from "react";
 
-
 import {variables} from "../../../Variables/Variables";
 import ModalComp from "./ModalComp";
 import {Button, Modal} from "react-bootstrap";
+import EditMenu from "./EditMenu";
+import checkCategoryName from "./CheckCategoryName";
+
 
 const SingleCard = (props) => {
 
     const [show, setShow] = useState(false);
 
+    const [showEdit, setShowEdit] = useState(false);
+
     const [cards, setCards] = useState([]);
 
     const [books, setBooks] = useState([]);
 
+    const [currentBook, setBook] = useState();
+
     const [bookName, setBookName] = useState("");
 
-    const [bookId, setBookId] = useState(0);
+    const [category, setCategory] = useState([]);
 
-    const [refresh,setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
+
+    const handleCloseEdit = () => setShowEdit(false);
+
+    const handleShowEdit = () => setShowEdit(true);
 
     const handleClose = () => setShow(false);
 
@@ -42,64 +52,84 @@ const SingleCard = (props) => {
             })
 
     }, [refresh]);
-
-    const refreshPage = () =>
-    {
-        setRefresh(true)
-    }
-    const editBook = (card) => {
-        setBookId(card.bookId);
-        setBookName("HarryPotter")
-    }
-    const createAndSendCard = (name,categoryId) => {
-        console.log(books.find(book => book.bookName === name && book.categoryId === categoryId).bookId)
-        fetch(variables.API_URL+'card',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                bookId: books.find(book => book.bookName === name && book.categoryId === categoryId).bookId,
-            })
-        })
-            .then(res=>res.json())
-            .then((result)=>{
-                alert(result);
-            },(error)=>{
-                alert('Card was not created');
-            })
-    }
-    const createAndSendToDBBook = (name,categoryId) => {
-        fetch(variables.API_URL+'book',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                bookName:name,
-                categoryId:categoryId
+    useEffect(() => {
+        fetch(variables.API_URL + 'category')
+            .then(response => response.json())
+            .then(data => {
+                setCategory(data);
+                setRefresh(false)
             })
 
+    }, [refresh]);
+
+
+    const updateBook = (bookName, categoryId) => {
+        console.log(bookName + ' ' + categoryId + 'Upd')
+        fetch(variables.API_URL + 'book', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                BookId: currentBook.bookId,
+                BookName: categoryId,
+                CategoryId: checkCategoryName(bookName)
+            })
         })
-            .then(res=>res.json())
-            .then((result)=>{
+            .then(res => res.json())
+            .then((result) => {
                 alert(result);
-            },(error)=>{
+                refreshPage()
+                handleCloseEdit()
+            }, (error) => {
                 alert('Failed');
             })
-        refreshPage()
+    }
+
+
+    const refreshPage = () => {
+        setRefresh(true)
+    }
+    const editBook = (book) => {
+        setBook(book)
+        if(book !== undefined)
+        {
+            handleShowEdit()
+        }
+    }
+
+
+    const createAndSendToDBBook = (name, categoryId) => {
+        fetch(variables.API_URL + 'book', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bookName: name,
+                categoryId: categoryId
+            })
+
+        })
+            .then(res => res.json())
+            .then((result) => {
+                alert(result);
+                refreshPage()
+                handleCloseEdit()
+            }, (error) => {
+                alert('Failed');
+            })
     }
 
 
     const changeBookName = e => setBookName(e.target.value)
 
 
-
-    const deleteBook = (card) => {
+    const deleteBook = (book) => {
         if (window.confirm('Are you sure?')) {
-            fetch(variables.API_URL + 'book/' + card.bookId, {
+            fetch(variables.API_URL + 'book/' + book.bookId, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -110,33 +140,37 @@ const SingleCard = (props) => {
                 .then(res => res.json())
                 .then((result) => {
                     alert(result);
+                    refreshPage()
+                    handleCloseEdit()
                 }, (error) => {
                     alert('Failed');
                 })
         }
     }
-    console.log(cards);
+    console.log(category);
     console.log(books);
 
-    if (books.length !== 0 && cards.length !== 0)
+    if (books.length !== 0 && cards.length !== 0 && category.length !== 0)
         return (
             <div>
+
 
                 <Button variant="primary" className="btn btn-primary m-2 float-end"
                         onClick={handleShow}>
                     AddBook
                 </Button>
 
-
-
                 <table className="table table-striped">
                     <thead>
                     <tr>
                         <th>
-                            CardId
+                            BookId
                         </th>
                         <th>
                             BookName
+                        </th>
+                        <th>
+                            CategoryName
                         </th>
                         <th>
                             Options
@@ -145,14 +179,15 @@ const SingleCard = (props) => {
 
                     </thead>
                     <tbody>
-                    {cards.map(card =>
-                        <tr key={card.cardId}>
-                            <td>{card.cardId}</td>
-                            <td>{books.find(book => book.bookId === card.bookId).bookName}</td>
+                    {books.map(book =>
+                        <tr key={book.bookId}>
+                            <td>{book.bookId}</td>
+                            <td>{book.bookName}</td>
+                            <td>{category.find(ctg => ctg.categoryId === book.categoryId).categoryName}</td>
                             <td>
                                 <button type="button"
                                         className="btn btn-light mr-1"
-                                        onClick={editBook.bind(this, card)}>
+                                        onClick={editBook.bind(this, book)}>
 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 1s6 16">
@@ -164,7 +199,7 @@ const SingleCard = (props) => {
                                 </button>
                                 <button type="button"
                                         className="btn btn-light mr-1"
-                                        onClick={deleteBook.bind(this, card)}
+                                        onClick={deleteBook.bind(this, book)}
                                 >
 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -178,17 +213,23 @@ const SingleCard = (props) => {
                     )}
                     </tbody>
                 </table>
-
-                <ModalComp
-                    createAndSendCard={createAndSendCard}
+                <EditMenu
                     refreshPage={refreshPage}
-                    createAndSendToDBBook = {createAndSendToDBBook}
+                    showEdit={showEdit}
+                    handleCloseEdit={handleCloseEdit}
+                    handleShowEdit={handleShowEdit}
+                    updateBook={updateBook}
+                    currentBook={currentBook}
+
+                />
+                <ModalComp
+                    refreshPage={refreshPage}
+                    createAndSendToDBBook={createAndSendToDBBook}
                     show={show}
-                    handleShow = {handleShow}
-                    handleClose = {handleClose}
+                    handleShow={handleShow}
+                    handleClose={handleClose}
                     changeBookName={changeBookName}
                     bookName={bookName}
-                    bookId={bookId}
                 />
 
             </div>

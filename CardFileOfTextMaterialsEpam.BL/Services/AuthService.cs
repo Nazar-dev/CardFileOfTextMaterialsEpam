@@ -199,7 +199,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             var roles = await _userManager.GetRolesAsync(user);
             return roles;
         }
-        public async Task<IEnumerable<CardModel>> GetUserCards(string email)
+        public async Task<CardModel> GetUserCards(string email)
         {
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == email);
             if (user is null)
@@ -207,10 +207,9 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
                 throw new AuthorizationException("User not found");
             }
 
-            var cadrs =  _unitOfWork.PersonRepository.GetAll();
-            cadrs = cadrs.Where(x => x.PersonId == user.Id);
-            var userCard = _mapper.Map<IEnumerable<CardModel>>(cadrs.FirstOrDefault());
-            return userCard;
+            var cardModel = _mapper.Map<CardModel>(user.Card);
+            return cardModel;
+
         }
         private string GenerateJwt(User user, IList<string> roles)
         {

@@ -51,14 +51,14 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "d3860b79-5f4b-491c-a674-9997971036fb",
+                            ConcurrencyStamp = "86fcb0fa-335a-45e5-9611-4dd28c39e51d",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "212acd8d-6fb1-48b7-899b-d7e1a18daa56",
+                            ConcurrencyStamp = "1a39842a-f97f-4e6c-8fe6-cd1c33fe70a8",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -72,6 +72,9 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CardId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -108,9 +111,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PersonId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -129,6 +129,8 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CardId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -136,8 +138,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("PersonId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -186,35 +186,12 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryId");
 
                     b.ToTable("ECategories");
-                });
-
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Person", b =>
-                {
-                    b.Property<int>("PersonId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PersonId");
-
-                    b.HasIndex("CardId");
-
-                    b.ToTable("EPersons");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -320,13 +297,13 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Auth.User", b =>
                 {
-                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Person", "Person")
+                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Card", "Card")
                         .WithMany()
-                        .HasForeignKey("PersonId")
+                        .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Person");
+                    b.Navigation("Card");
                 });
 
             modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Book", b =>
@@ -349,17 +326,6 @@ namespace CardFileOfTextMaterialsEpam.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("CardFileOfTextMaterialsEpam.DAL.Entities.Person", b =>
-                {
-                    b.HasOne("CardFileOfTextMaterialsEpam.DAL.Entities.Card", "Card")
-                        .WithMany()
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Card");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

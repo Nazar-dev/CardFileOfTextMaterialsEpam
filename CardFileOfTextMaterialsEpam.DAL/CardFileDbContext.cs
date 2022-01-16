@@ -12,7 +12,6 @@ namespace CardFileOfTextMaterialsEpam.DAL
         }
         public DbSet<Book> EBooks { get; set; }
         public DbSet<Card> ECards { get; set; }
-        public DbSet<Person> EPersons { get; set; }
         public DbSet<Category> ECategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

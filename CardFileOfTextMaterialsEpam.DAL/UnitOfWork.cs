@@ -12,7 +12,6 @@ namespace CardFileOfTextMaterialsEpam.DAL {
 		
 		private ICategoryRepository _categoryRepository;
 		
-		private IPersonRepository _personRepository;
 		
 		public UnitOfWork(CardFileDbContext context) {
 			_context = context;
@@ -49,14 +48,6 @@ namespace CardFileOfTextMaterialsEpam.DAL {
 		}
 
 
-        public IPersonRepository PersonRepository
-		{
-			get
-			{
-				this._personRepository ??= new PersonRepository(_context);
-				return _personRepository;
-			}
-		}
 		
 		public async Task<int> SaveAsync() {
 			return await _context.SaveChangesAsync();
