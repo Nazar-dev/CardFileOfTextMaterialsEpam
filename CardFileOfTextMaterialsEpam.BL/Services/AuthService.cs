@@ -125,7 +125,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         {
             var resUser =
                 await _userManager.Users.SingleOrDefaultAsync(u =>
-                    u.Email == user.Email && u.LastName == user.LastName);
+                    u.Id == user.Id);
             if (resUser is null)
             {
                 throw new AuthorizationException();
@@ -134,6 +134,19 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             if (!string.IsNullOrEmpty(user.PasswordHash))
             {
                 user.PasswordHash = _userManager.PasswordHasher.HashPassword(resUser, user.PasswordHash);
+            }
+            if (resUser.FirstName != user.FirstName)
+            {
+                resUser.FirstName = user.FirstName;
+            }
+
+            if (resUser.Email != user.Email)
+            {
+                resUser.Email = user.Email;
+            }
+            if (resUser.LastName != user.LastName)
+            {
+                resUser.LastName = user.LastName;
             }
 
             await _userManager.UpdateAsync(resUser);

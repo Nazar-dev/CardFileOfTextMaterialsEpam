@@ -1,26 +1,87 @@
 import React, {useState, useEffect} from "react";
 
 import {variables} from "../../Variables/Variables";
+import {Button} from "react-bootstrap";
+import AddUser from "./AddUser";
 
 const AdminUserPage = (props) => {
 
+    const [showAddBtn, setShowAddBtn] = useState(false);
+
+    const [showEditBtn, setShowEditBtn] = useState(false);
+
     const [users, setUsers] = useState([]);
 
-    const [persons, setPersons] = useState([]);
+    const [cards, setCards] = useState([]);
+
+    const handleCloseEditButton = () => setShowEditBtn(false);
+
+    const handleShowEditButton = () => setShowEditBtn(true);
+
+    const handleCloseAddButton = () => setShowAddBtn(false);
+
+    const handleShowAddButton = () => setShowAddBtn(true);
+
+
+
+    const [refresh, setRefresh] = useState(false);
+
+    const refreshPage = () => {
+        setRefresh(true)
+    }
+    useEffect(() => {
+        fetch(variables.API_URL + 'card')
+            .then(response => response.json())
+            .then(data => {
+                setCards(data);
+                setRefresh(false)
+            })
+    }, [refresh])
 
     useEffect(() => {
         fetch(variables.API_URL + 'authorization')
             .then(response => response.json())
             .then(data => {
                 setUsers(data);
+                setRefresh(false)
             })
-    }, [])
+    }, [refresh])
+
+    const createAndSendToDbUser = (email, firstname,lastname,cardId,password) => {
+        fetch(variables.API_URL + 'authorization/signup', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Email:email,
+                FirstName:firstname,
+                LastName:lastname,
+                CardId:parseInt(cardId),
+                Password:password
+            })
+
+        })
+            .then(res => res.json())
+            .then((result) => {
+                alert(result);
+                refreshPage()
+                handleCloseAddButton()
+            }, (error) => {
+                alert('Failed');
+            })
+    }
 
     console.log(users);
 
     if (users.length !== 0)
         return (
             <div>
+                <Button variant="primary" className="btn btn-primary m-2 float-end"
+                        onClick={handleShowAddButton}>
+                    AddUser
+                </Button>
                 <table className="table table-striped">
                     <thead>
                     <tr>
@@ -70,8 +131,8 @@ const AdminUserPage = (props) => {
                                 </button>
                                 <button type="button"
                                         className="btn btn-light mr-1"
-                                        onClick={() =>{
-                                            if(window.confirm('Are you sure?')) {
+                                        onClick={() => {
+                                            if (window.confirm('Are you sure?')) {
                                                 fetch(variables.API_URL + 'authorization/' + user.id, {
                                                     method: 'DELETE',
                                                     headers: {
@@ -101,6 +162,16 @@ const AdminUserPage = (props) => {
                     )}
                     </tbody>
                 </table>
+                <AddUser
+                    handleShowAddButton={handleShowAddButton}
+                    handleCloseAddButton={handleCloseAddButton}
+                    showAddBtn = {showAddBtn}
+                    createAndSendToDbUser={createAndSendToDbUser}
+                    refreshPage ={refreshPage}
+                    cards = {cards}
+                    users={users}
+
+                />
             </div>
         )
     else return (<div>Loading...</div>)

@@ -1,33 +1,112 @@
 import React, {useState} from "react";
 import {Button, Dropdown, Modal} from "react-bootstrap";
-import CheckCategoryName from "./CheckCategoryName";
-import {variables} from "../../../Variables/Variables";
+import transitionEndListener from "react-bootstrap/transitionEndListener";
 
 
-function ModalComp(props) {
+function AddUser(props) {
 
-    const [dropDownValue, setDropDownValue] = useState("SelectCategory");
 
-    const [textValue, setTextValue] = useState();
+    const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [cardId, setCardId] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPass, setConfirmPass] = useState('');
 
-    const changeValue = (text) => {
-        setDropDownValue(text)
-        console.log(textValue + " " + dropDownValue)
+    const [values, setValues] = useState({
+        password: "",
+        showPassword: false,
+    });
+    const validEmail = () =>
+    {
+        if(props.users.find(user => user.email === email) === undefined)
+        {
+            return true
+        }
+        else {
+            alert("Email is already taken")
+        }
+    }
+    const validCardId = () =>
+    {
+        if(props.cards.find(card => card.cardId === parseInt(cardId)) !== undefined)
+        {
+            return true
+        }
+       else {
+           alert("Card id wasn't found")
+        }
+    }
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
+    const confirmPassword = () => {
+        if(validatePassword()) {
+            if (confirmPass === password) {
+                return true;
+            } else {
+                alert("Password didnt match")
+            }
+        }
+        else
+        {
+            alert("Password must contain at least:\n 8 characters,\n 1 capital letter,\n 1 lower letter,\n 1 special symbol ")
+        }
+    }
+
+    const validatePassword = () =>
+    {
+        const lowerCaseLetters = /[a-z]/g;
+        const upperCaseLetters = /[A-Z]/g;
+        const numbers = /[0-9]/g;
+        if(password.length >= 8 &&
+            password.match(lowerCaseLetters) &&
+            password.match(upperCaseLetters) &&
+            password.match(numbers))
+            return true;
+        return false;
     }
 
     const closeWindow = () => {
-        props.handleClose()
-        setTextValue(null)
-        setDropDownValue("SelectCategory")
+        props.handleCloseAddButton()
+        setFieldToEmpty()
     }
-    const addBookClicked = () => {
-        props.handleClose()
-        if (textValue !== null && dropDownValue !== "SelectCategory") {
-            props.createAndSendToDBBook(textValue, CheckCategoryName(dropDownValue))
-            props.refreshPage()
+    const setFieldToEmpty = () => {
+        setPassword('')
+        setFirstName('')
+        setCardId('')
+        setLastName('')
+        setEmail('')
+        setConfirmPass('')
+
+    }
+
+    const addUserClicked = () => {
+
+        if (email !== ''
+            && firstName !== ''
+            && lastName !== ''
+            && password !== ''
+            && cardId !== ''
+            && confirmPass !== '') {
+            if(validEmail()) {
+                if (validCardId()) {
+                    if (confirmPassword()) {
+                        props.createAndSendToDbUser(email, firstName, lastName, cardId, password)
+                        props.refreshPage()
+                        setFieldToEmpty()
+                        props.handleCloseAddButton()
+                    }
+                }
+            }
         } else {
             alert("You forgot to fill some fields.")
         }
+
 
     }
 
@@ -35,51 +114,48 @@ function ModalComp(props) {
     return (
         <>
 
-            <Modal show={props.show} onHide={props.handleClose}>
+            <Modal show={props.showAddBtn} onHide={props.handleCloseAddButton}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Book</Modal.Title>
+                    <Modal.Title>Add User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div>
-
-                        <h5>Enter BookName</h5>
+                        <h5>Enter Email</h5>
                         <input type="text" className="form-control"
-                               value={textValue}
+                               value={email}
                                onChange={(e) =>
-                                   setTextValue(e.target.value)}
+                                   setEmail(e.target.value)}
                         />
-                        <h5>Select BookCategory</h5>
-
-                        <Dropdown>
-                            <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                {dropDownValue}
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>
-                                    <div
-                                        onClick={(e) =>
-                                            changeValue(e.target.textContent)}
-                                    >Roman
-                                    </div>
-                                </Dropdown.Item>
-                                <Dropdown.Item>
-                                    <div
-                                        onClick={(e) =>
-                                            changeValue(e.target.textContent)}
-
-                                    >Drama
-                                    </div>
-                                </Dropdown.Item>
-                                <Dropdown.Item>
-                                    <div
-                                        onClick={(e) =>
-                                            changeValue(e.target.textContent)}
-                                    >Poem
-                                    </div>
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <h5>Enter First Name</h5>
+                        <input type="text" className="form-control"
+                               value={firstName}
+                               onChange={(e) =>
+                                   setFirstName(e.target.value)}
+                        />
+                        <h5>Enter Last Name</h5>
+                        <input type="text" className="form-control"
+                               value={lastName}
+                               onChange={(e) =>
+                                   setLastName(e.target.value)}
+                        />
+                        <h5>Enter Card Id</h5>
+                        <input type="text" className="form-control"
+                               value={cardId}
+                               onChange={(e) =>
+                                   setCardId(e.target.value)}
+                        />
+                        <h5>Enter Password</h5>
+                        <input type={values.showPassword ? "text" : "password"} className="form-control"
+                               value={password}
+                               onChange={(e) =>
+                                   setPassword(e.target.value)}
+                        />
+                        <h5>Confirm Password</h5>
+                        <input type={values.showPassword ? "text" : "password"} className="form-control"
+                               value={confirmPass}
+                               onChange={(e) =>
+                                   setConfirmPass(e.target.value)}
+                        />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -88,8 +164,8 @@ function ModalComp(props) {
                     }>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={addBookClicked}>
-                        Add book
+                    <Button variant="primary" onClick={addUserClicked}>
+                        Add user
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -101,4 +177,4 @@ function ModalComp(props) {
 
 }
 
-export default ModalComp;
+export default AddUser;

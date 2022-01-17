@@ -18,6 +18,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
     {
         private readonly AuthService _authService;
         private readonly HttpContext _httpContext;
+
         public AuthorizationController(AuthService authservice, IHttpContextAccessor httpContextAccessor)
         {
             _authService = authservice;
@@ -36,6 +37,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return null;
             }
         }
+
         [HttpGet("{id}")]
         public async Task<User> GetUserById(int id)
         {
@@ -63,7 +65,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser([FromBody]User user)
         {
             if (user == null)
             {
@@ -97,9 +99,15 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
 
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp(UserSignUpModel user)
+        public async Task<IActionResult> SignUp([FromBody] UserSignUpModel user)
         {
+            if (user == null)
+            {
+                return BadRequest("No data was provided");
+            }
+
             try
+
             {
                 await _authService.SignUp(user);
                 return new JsonResult("You are registered");
@@ -109,8 +117,9 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn(UserLoginModel user)
+        public async Task<IActionResult> SignIn([FromBody] UserLoginModel user)
         {
             try
             {
@@ -122,6 +131,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [HttpPost("signout")]
         public async Task<IActionResult> SignOut()
         {
@@ -136,6 +146,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [HttpPost("roles/{roleName}")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
@@ -149,6 +160,7 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [HttpPost("addRole/{roleName}")]
         public async Task<IActionResult> AddUserToRole([FromBody] string userEmail, string roleName)
         {
@@ -189,7 +201,5 @@ namespace CardFileOfTextMaterialsEpam.PL.Controllers
                 return null;
             }
         }
-
-
     }
 }
