@@ -27,22 +27,13 @@ function AddUser(props) {
             alert("Email is already taken")
         }
     }
-    const validCardId = () =>
-    {
-        if(props.cards.find(card => card.cardId === parseInt(cardId)) !== undefined)
-        {
+    const validCardId = () => {
+        if (props.cards.find(card => card.cardId === parseInt(cardId)) !== undefined) {
             return true
-        }
-       else {
-           alert("Card id wasn't found")
+        } else {
+            alert("Card id wasn't found")
         }
     }
-    const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
-    };
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
 
     const confirmPassword = () => {
         if(validatePassword()) {
@@ -91,18 +82,16 @@ function AddUser(props) {
             && firstName !== ''
             && lastName !== ''
             && password !== ''
-            && cardId !== ''
             && confirmPass !== '') {
             if(validEmail()) {
-                if (validCardId()) {
                     if (confirmPassword()) {
-                        props.createAndSendToDbUser(email, firstName, lastName, cardId, password)
+                        props.createAndSendToDbUser(email, firstName, lastName, 2, password)
                         props.refreshPage()
                         setFieldToEmpty()
                         props.handleCloseAddButton()
                     }
                 }
-            }
+
         } else {
             alert("You forgot to fill some fields.")
         }
@@ -138,12 +127,6 @@ function AddUser(props) {
                                onChange={(e) =>
                                    setLastName(e.target.value)}
                         />
-                        <h5>Enter Card Id</h5>
-                        <input type="text" className="form-control"
-                               value={cardId}
-                               onChange={(e) =>
-                                   setCardId(e.target.value)}
-                        />
                         <h5>Enter Password</h5>
                         <input type={values.showPassword ? "text" : "password"} className="form-control"
                                value={password}
@@ -174,6 +157,7 @@ function AddUser(props) {
         </>
 
     )
+
 
 }
 

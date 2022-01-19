@@ -3,6 +3,8 @@ import React, {useState, useEffect} from "react";
 import {variables} from "../../Variables/Variables";
 import {Button} from "react-bootstrap";
 import AddUser from "./AddUser";
+import checkCategoryName from "../../LoggedUserPage/UsersCards/SingleCard/CheckCategoryName";
+import EditUser from "./EditUser";
 
 const AdminUserPage = (props) => {
 
@@ -22,6 +24,7 @@ const AdminUserPage = (props) => {
 
     const handleShowAddButton = () => setShowAddBtn(true);
 
+    const [currentUser, setCurrentUser] = useState();
 
 
     const [refresh, setRefresh] = useState(false);
@@ -47,7 +50,33 @@ const AdminUserPage = (props) => {
             })
     }, [refresh])
 
-    const createAndSendToDbUser = (email, firstname,lastname,cardId,password) => {
+
+    const updateUser = (email, firstname, lastname, cardId) => {
+        fetch(variables.API_URL + 'authorization', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: currentUser.id,
+                Email: email,
+                FirstName: firstname,
+                Lastname: lastname,
+                cardId: parseInt(cardId)
+            })
+        })
+            .then(res => res.json())
+            .then((result) => {
+                alert(result);
+                refreshPage()
+                handleCloseEditButton()
+            }, (error) => {
+                alert('Failed');
+            })
+    }
+
+    const createAndSendToDbUser = (email, firstname, lastname, cardId, password) => {
         fetch(variables.API_URL + 'authorization/signup', {
             method: 'POST',
             headers: {
@@ -55,11 +84,11 @@ const AdminUserPage = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                Email:email,
-                FirstName:firstname,
-                LastName:lastname,
-                CardId:parseInt(cardId),
-                Password:password
+                Email: email,
+                FirstName: firstname,
+                LastName: lastname,
+                CardId: parseInt(cardId),
+                Password: password
             })
 
         })
@@ -72,7 +101,32 @@ const AdminUserPage = (props) => {
                 alert('Failed');
             })
     }
+    const editUser = (user) => {
+        setCurrentUser(user)
+        if (user !== undefined) {
+            handleShowEditButton()
+        }
+    }
 
+    const deleteUser = (user) => {
+        if (window.confirm('Are you sure?')) {
+            fetch(variables.API_URL + 'authorization/' + user.id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+
+                .then(res => res.json())
+                .then((result) => {
+                    alert(result);
+                    refreshPage();
+                }, (error) => {
+                    alert('Failed');
+                })
+        }
+    }
     console.log(users);
 
     if (users.length !== 0)
@@ -120,7 +174,8 @@ const AdminUserPage = (props) => {
                             <td>{user.role}</td>
                             <td>
                                 <button type="button"
-                                        className="btn btn-light mr-1">
+                                        className="btn btn-light mr-1"
+                                        onClick={editUser.bind(this, user)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path
@@ -131,25 +186,7 @@ const AdminUserPage = (props) => {
                                 </button>
                                 <button type="button"
                                         className="btn btn-light mr-1"
-                                        onClick={() => {
-                                            if (window.confirm('Are you sure?')) {
-                                                fetch(variables.API_URL + 'authorization/' + user.id, {
-                                                    method: 'DELETE',
-                                                    headers: {
-                                                        'Accept': 'application/json',
-                                                        'Content-Type': 'application/json'
-                                                    }
-                                                })
-
-                                                    .then(res => res.json())
-                                                    .then((result) => {
-                                                        alert(result);
-                                                    }, (error) => {
-                                                        alert('Failed');
-                                                    })
-                                            }
-                                        }
-                                        }>
+                                        onClick={deleteUser.bind(this, user)}>
 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
@@ -165,16 +202,32 @@ const AdminUserPage = (props) => {
                 <AddUser
                     handleShowAddButton={handleShowAddButton}
                     handleCloseAddButton={handleCloseAddButton}
-                    showAddBtn = {showAddBtn}
+                    showAddBtn={showAddBtn}
                     createAndSendToDbUser={createAndSendToDbUser}
-                    refreshPage ={refreshPage}
-                    cards = {cards}
+                    refreshPage={refreshPage}
+                    cards={cards}
                     users={users}
+                    updateUser={updateUser}
+                    currentuser={currentUser}
+
+                />
+                <EditUser
+                    handleShowEditButton={handleShowEditButton}
+                    handleCloseEditButton={handleCloseEditButton}
+                    showEditBtn={showEditBtn}
+                    refreshPage={refreshPage}
+                    cards={cards}
+                    users={users}
+                    updateUser={updateUser}
+                    currentuser={currentUser}
 
                 />
             </div>
         )
-    else return (<div>Loading...</div>)
+    else return (<button className="btn btn-primary" disabled>
+        <span className="spinner-border spinner-border-sm"></span>
+        Loading..
+    </button>)
 
 
 }

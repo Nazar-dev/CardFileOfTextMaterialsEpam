@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,7 +61,7 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
         }
 
 
-        public async Task<bool> SignIn(UserLoginModel userLoginModel)
+        public async Task<AuthSettings> SignIn(UserLoginModel userLoginModel)
         {
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.UserName == userLoginModel.Email);
             if (user is null)
@@ -75,10 +76,10 @@ namespace CardFileOfTextMaterialsEpam.BL.Services
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 var token = GenerateJwt(user, roles);
-                return true;
+                return new AuthSettings(user, roles.FirstOrDefault(), token);
             }
 
-            return false;
+            throw new AuthenticationException("Email or password is incorrect.");
         }
 
         public async Task<bool> CreateRole(string roleName)

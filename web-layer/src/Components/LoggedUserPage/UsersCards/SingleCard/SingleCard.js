@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 
 import {variables} from "../../../Variables/Variables";
 import ModalComp from "./ModalComp";
-import {Button, Modal} from "react-bootstrap";
+import {Button, Dropdown, Modal} from "react-bootstrap";
 import EditMenu from "./EditMenu";
 import checkCategoryName from "./CheckCategoryName";
 
@@ -154,7 +154,6 @@ const SingleCard = (props) => {
         return (
             <div>
 
-
                 <Button variant="primary" className="btn btn-primary m-2 float-end"
                         onClick={handleShow}>
                     AddBook
@@ -235,7 +234,10 @@ const SingleCard = (props) => {
             </div>
         )
 
-    else return (<div>Loading...</div>)
+    else return (<button className="btn btn-primary" disabled>
+        <span className="spinner-border spinner-border-sm"></span>
+        Loading..
+    </button>)
 
 
 }
